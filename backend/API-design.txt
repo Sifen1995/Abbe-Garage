@@ -1,0 +1,435 @@
+API Documentation for ABE-GARAGE
+A--Authentication & Authorization API 
+1-Authentication Middleware
+
+Endpoint: /api/user/checkUser
+Method: GET
+Description: Checks the current authenticated user's information.
+Request Headers
+● Authorization: Bearer token
+Successful Response
+Status Code: 200 OK
+Content-Type: application/json
+{
+"message": "Valid user",
+"username": “Kebede”,
+“userid”:”123”
+}
+Error Responses
+Status Code: 401 Unauthorized
+Description: Authentication credentials were missing or incorrect.
+{
+"error": "Unauthorized",
+"message": "Authentication invalid"
+}
+
+  
+2-Sign-Up (only for manager)
+Endpoint: /api/user/register
+Method: POST
+Description: Registers a new manager.
+Request Body 
+● username (string): The username of the user.
+● first_name (string): The first name of the user.
+● last_name (string): The last name of the user.
+● email (string): The email of the user.
+● password (string): The password of the user.
+Successful Response
+Status Code: 201 Created
+Content-Type: application/json
+{
+"message": "User registered successfully waiting for admin approval"
+}
+Error Responses
+Status Code: 400 Bad Request
+Description: Missing or invalid fields.
+{
+"error": "Bad Request",
+"message": "Please provide all required fields"
+}
+Status Code: 400 Bad Request
+Description: Missing or invalid fields.
+{
+"error": "Bad Request",
+"message": "Password must be at least 8 characters"
+}
+Status Code: 409 Conflict
+Description: A user with the provided username or email already exists.
+{
+"error": "Conflict",
+"message": "User already existed"
+}
+Status Code: 500 Internal Server Error
+Description:An unexpected error occurred.
+{
+"error": "Internal Server Error",
+"message": "An unexpected error occurred."
+}
+
+3-Login(for admin,manager and employe)
+
+Endpoint: /api/user/login
+Method: POST
+Description: Authenticates a user and returns a JWT token.
+Request Body
+● email(string): The email of the user.
+● password (string): The password of the user.
+Successful Response
+Status Code: 200 OK
+Content-Type: application/json
+{
+"message": "User login successful",
+"token": "jwt_token"
+}
+Error Responses
+Status Code: 401 Unauthorized
+Description: Invalid credentials.
+{
+"error": "Unauthorized",
+"message": "Invalid username or password"
+}
+Status Code: 400 Bad Request
+Description: Missing or invalid fields.
+{
+"error": "Bad Request",
+"message": "Please provide all required fields"
+}
+Status Code: 500 Internal Server Error
+Description:An unexpected error occurred.
+{
+"error": "Internal Server Error",
+"message": "An unexpected error occurred."
+}
+
+4-logout
+
+Endpoint: /api/user/loguot
+Method: POST
+Description: logs a user out and clear session
+Request Body(no request bodey requered)
+Successful Response
+Status Code: 200 OK
+Content-Type: application/json
+{
+"message": "User logout successfully successful",
+
+}
+Error Responses
+  "error": "Unauthorized",
+  "message": "Access denied. No token provided or token is invalid."
+{
+ "error": "Internal Server Error",
+  "message": "An unexpected error occurred."
+}
+Status Code: 400 Bad Request
+Description: Missing or invalid fields.
+{
+"error": "Bad Request",
+"message": "Please provide all required fields"
+}
+Status Code: 500 Internal Server Error
+Description:An unexpected error occurred.
+{
+"error": "Internal Server Error",
+"message": "An unexpected error occurred."
+}
+
+B--Employee Management
+
+1-List all employees
+
+Endpoint: /api/employees
+Method: GET 
+Description: return list of all employees
+Authentication Required
+Header{
+    Authorization: Bearer <admin_jwt_token>
+}
+Request Body{
+ optional filter for role and status
+ pagelimit=1&limit=20
+}
+Successful Response
+Status Code: 200 OK
+Content-Type: application/json
+{
+"message": "Employees fetched successfully",
+ "employees": [
+    {
+      "id": "emp_001",
+      "fullName": "Marta Manager",
+      "email": "marta@abesgarage.com",
+      "role": "manager",
+      "status": "active",
+      "createdAt": "2025-06-01T12:00:00Z"
+    },
+    {
+      "id": "emp_002",
+      "fullName": "Mike Mechanic",
+      "email": "mike@abesgarage.com",
+      "role": "mechanic",
+      "status": "active",
+      "createdAt": "2025-06-05T09:30:00Z"
+    }
+  ]
+
+}
+
+Error Responses
+ 401 unauthorized 
+ Description: Missing or invalid token
+{
+ "error": "Unauthorized",
+  "message": "Access denied. Please provide a valid token."
+}
+Status Code: 403 Forbidden
+Description:Insufficient permissions (e.g. customer trying to access)
+{
+ "error": "Forbidden",
+  "message": "You are not authorized to access this resource."
+}
+Status Code: 500 Internal Server Error
+Description:An unexpected error occurred.
+{
+"error": "Internal Server Error",
+"message": "An unexpected error occurred."
+}
+
+2-register singel employees
+
+Endpoint: /api/employees
+Method: POST
+Description: Creates a new employee account with a specified role. This endpoint is restricted to Admins only.
+Authentication Required
+Header{
+    Authorization: Bearer <admin_jwt_token>
+}
+Request Body{
+ "fullName": "Mike Mechanic",
+  "email": "mike@abesgarage.com",
+  "password": "Strong
+}
+Successful Response
+Status Code: 201created
+Content-Type: application/json
+{
+"message": "Employees created successfully",
+  "employee": {
+    "id": "e5a1234567",
+    "fullName": "Mike Mechanic",
+    "email": "mike@abesgarage.com",
+    "role": "mechanic",
+    "status": "active",
+    "createdAt": "2025-06-24T10:30:00Z"
+  }
+}
+
+Error Responses
+ 400 Bad Request
+ Description:Missing or invalid fields
+{
+  "error": "Bad Request",
+  "message": "Email, password, fullName, and role are required"
+}
+Status Code: 403 Forbidden
+Description:Insufficient permissions (e.g. customer trying to access)
+{
+ "error": "Forbidden",
+  "message": "You are not authorized to access this resource."
+}
+Status Code: 409 Conflict
+Description: Email already in use
+{
+  "error": "Conflict",
+  "message": "An employee with this email already exists" 
+}
+Status Code: 500 Internal Server Error
+Description:An unexpected error occurred.
+{
+"error": "Internal Server Error",
+"message": "An unexpected error occurred."
+}
+
+3-edit singel employee
+
+Endpoint: /api/employees/:id
+Method: PUT 
+Description: update detail information of existing employees
+Authentication Required
+Header{
+    Authorization: Bearer <admin_jwt_token>
+}
+Request parameter{
+  employee unique id
+}
+Request Body
+{
+  "fullName": "Michael Mechanic",
+  "email": "mike.updated@abesgarage.com",
+  "role": "mechanic",           // Optional
+  "status": "active"  
+}
+Successful Response
+Status Code: 200 OK
+Content-Type: application/json
+{
+"message": "Employees updated successfully",
+ "employee": {
+    "id": "emp_002",
+    "fullName": "Michael Mechanic",
+    "email": "mike.updated@abesgarage.com",
+    "role": "mechanic",
+    "status": "active",
+    "updatedAt": "2025-06-24T11:30:00Z"
+  }
+}
+
+Error Responses
+ 401 unauthorized 
+ Description: Missing or invalid token
+{
+ "error": "Unauthorized",
+  "message": "Access denied. Please provide a valid token."
+}
+Status Code: 403 Forbidden
+Description:Insufficient permissions (e.g. customer trying to access)
+{
+ "error": "Forbidden",
+  "message": "You are not authorized to access this resource."
+}
+Status Code: 404 not found
+Description:user not found
+{
+  "error": "Not Found",
+  "message": "Employee not found."
+}
+
+Status Code: 500 Internal Server Error
+Description:An unexpected error occurred.
+{
+"error": "Internal Server Error",
+"message": "An unexpected error occurred."
+}
+
+4-Delete singel employe
+
+
+Endpoint: /api/employees/:id
+Method: PUT 
+Description: Deletes (or deactivates) an employee account. This operation is permanent unless soft-delete is used. Admin only.
+Authentication Required
+Header{
+    Authorization: Bearer <admin_jwt_token>
+}
+Request parameter{
+  employee id
+}
+Successful Response
+Status Code: 200 OK
+Content-Type: application/json
+{
+  "message": "Employee deleted successfully"
+}
+
+Error Responses
+ 401 unauthorized 
+ Description: Missing or invalid token
+{
+ "error": "Unauthorized",
+  "message": "Access denied. Please provide a valid token."
+}
+Status Code: 403 Forbidden
+Description:Insufficient permissions (e.g. customer trying to access)
+{
+ "error": "Forbidden",
+  "message": "You are not authorized to access this resource."
+}
+Status Code: 404 not found
+Description:user not found
+{
+  "error": "Not Found",
+  "message": "Employee not found."
+}
+
+Status Code: 500 Internal Server Error
+Description:An unexpected error occurred.
+{
+"error": "Internal Server Error",
+"message": "An unexpected error occurred."
+}
+
+C--Customer Management
+
+1-get all customers
+
+Endpoint: /api/customers
+Method: GET
+Description: retrive list of all coustomers
+Authentication Required
+Header{
+    Authorization: Bearer <admin_jwt_token>
+}
+Request Body{
+ optional filter for  status
+ pagelimit=1&limit=20
+}
+Successful Response
+Status Code: 200 OK
+Content-Type: application/json
+{
+  "message": "customers feached successfully"
+  "customers": [
+    {
+      "id": "emp_001",
+      "fullName": "Marta Manager",
+      "email": "marta@abesgarage.com",
+      "status": "active",
+      "createdAt": "2025-06-01T12:00:00Z"
+    },
+    {
+      "id": "emp_002",
+      "fullName": "Mike Mechanic",
+      "email": "mike@abesgarage.com",
+      "status": "active",
+      "createdAt": "2025-06-05T09:30:00Z"
+    }
+  ]
+}
+
+Error Responses
+ 401 unauthorized 
+ Description: Missing or invalid token
+{
+ "error": "Unauthorized",
+  "message": "Access denied. Please provide a valid token."
+}
+Status Code: 403 Forbidden
+Description:Insufficient permissions (e.g. customer trying to access)
+{
+ "error": "Forbidden",
+  "message": "You are not authorized to access this resource."
+}
+Status Code: 404 not found
+Description:user not found
+{
+  "error": "Not Found",
+  "message": "Employee not found."
+}
+Status Code: 500 Internal Server Error
+Description:An unexpected error occurred.
+{
+"error": "Internal Server Error",
+"message": "An unexpected error occurred."
+}
+
+
+
+
+
+
+
+
+
+
+
+
