@@ -315,7 +315,7 @@ Description:An unexpected error occurred.
 
 
 Endpoint: /api/employees/:id
-Method: PUT 
+Method: Delete
 Description: Deletes (or deactivates) an employee account. This operation is permanent unless soft-delete is used. Admin only.
 Authentication Required
 Header{

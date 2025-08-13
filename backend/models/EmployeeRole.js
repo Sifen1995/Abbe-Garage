@@ -6,7 +6,7 @@ const Employee_role=sequelize.define("employee_role",{
     type:DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true,
-    //defaultValue: DataTypes.INTEGER
+    
    } ,
    	company_role_id:{
     type: DataTypes.INTEGER, 

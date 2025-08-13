@@ -23,6 +23,34 @@ sequelize.sync()
   .catch((err) => console.error("❌ Sync error:", err));
 
 
+//section for auth routeing
+const auth_route=require("./routes/auth.routes")
+server.use(express.json())
+
+server.use("/api/user",auth_route)
+
+//section for adminEmployee routeing
+
+const admin_route=require("./routes/adminEmployee.route")
+const adminMiddelware=require("./middleware/admin_auth.middelware")
+server.use(express.json())
+
+server.use("/api/employees",adminMiddelware,admin_route)
+
+//section for adminCustomer routeing
+
+const admin_customer_route=require("./routes/adminCustomer.route")
+server.use(express.json())
+
+server.use("/api/employees",adminMiddelware,admin_customer_route)
+
+
+
+
+
+
+
+
 server.listen(port,async(err)=>{
     if (err) {
         console.log(err)
