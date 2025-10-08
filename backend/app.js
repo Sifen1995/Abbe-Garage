@@ -42,7 +42,16 @@ server.use("/api/employees",adminMiddelware,admin_route)
 const admin_customer_route=require("./routes/adminCustomer.route")
 server.use(express.json())
 
-server.use("/api/employees",adminMiddelware,admin_customer_route)
+server.use("/api/customers",adminMiddelware,admin_customer_route)
+
+//section for vehicle routeing
+const vehicle_route=require('./routes/adminVehicle')
+server.use(express.json())
+
+server.use("/api/vehicle",vehicle_route)
+
+
+
 
 
 

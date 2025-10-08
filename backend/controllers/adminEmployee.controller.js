@@ -57,45 +57,58 @@ async function addEmployee(req,res) {
     }
 }
 
-async function geAllEmployee(req,res) {
-     try {
-        const allEmployee=await Employee.findAll({
-  include: [
-    {
-      model: EmployeeInfo,
-      as: "EmployeeInfoDetail",
-      attributes: ['employee_first_name', 'employee_last_name']
-    },
-    {
-      model: EmployeeRole,
-      as:"EmployeeRoleDetail"
-    }
-  ]
-})
- const formatedRes=addEmployee.map()
-    res.status(200).json(res.status(200).json({
-  message: "Employees fetched successfully",
-  employees: allEmployee.map(emp => {
-    return {
-      id: emp.employee_id,
-      fullName: `${emp.EmployeeInfoDetail.employee_first_name} ${emp.EmployeeInfoDetail.employee_last_name}`,
-      email: emp.employee_email,
-      role: emp.EmployeeRoleDetail.company_role_name, 
-      status: emp.employee_active_status,
-      createdAt: emp.createdAt
-    };
-  })
-}));
-    } catch (error) {
-    console.error(error); 
+async function geAllEmployee(req, res) {
+  try {
+    const allEmployee = await Employee.findAll({
+      // Ensure associations are correctly aliased and included
+      attributes: ['employee_id', 'employee_email', 'employee_active_status', 'employee_added_date'],
+      include: [
+        {
+          model: EmployeeInfo,
+          as: "EmployeeInfoDetail",
+          attributes: ['employee_first_name', 'employee_last_name']
+        },
+        {
+          model: EmployeeRole,
+          as: "EmployeeRoleDetail",
+          // Include the CompanyRoles model to get the role name
+          include: {
+            model: CompanyRoles,
+            as: "CompanyRoleDetail",
+            attributes: ['company_role_name']
+          }
+        }
+      ]
+    });
 
-      
-    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ msg: 'Something went wrong on our server' });
-}
+    const formattedEmployees = allEmployee.map(emp => {
+      // Safely access nested data using the correct aliases
+      const fullName = `${emp.EmployeeInfoDetail.employee_first_name} ${emp.EmployeeInfoDetail.employee_last_name}`;
+      const roleName = emp.EmployeeRoleDetail && emp.EmployeeRoleDetail.CompanyRoleDetail ? emp.EmployeeRoleDetail.CompanyRoleDetail.company_role_name : null;
+
+      return {
+        id: emp.employee_id,
+        fullName: fullName,
+        email: emp.employee_email,
+        role: roleName,
+        status: emp.employee_active_status,
+        createdAt: emp.employee_added_date
+      };
+    });
+
+    res.status(StatusCodes.OK).json({
+      message: "Employees fetched successfully",
+      employees: formattedEmployees
+    });
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ msg: 'Something went wrong on our server' });
+  }
 }
 
 async function updateEmployee(req, res) {
-  const targeted_employee_id = req.params.id; // from URL
+  const targeted_employee_id = req.params.id;
   const {
     email,
     firstname,
@@ -108,7 +121,7 @@ async function updateEmployee(req, res) {
   const t = await sequelize.transaction();
 
   try {
-    // 1. Find employee with associations
+    
     const employee = await Employee.findByPk(targeted_employee_id, {
       include: [
         { model: EmployeeInfo, as: "EmployeeInfoDetail" },
@@ -171,6 +184,53 @@ async function deleteEmployee(req,res) {
   }
 }
 
+async function getSingleEmployee(req,res) {
+    const targeted_employee_id=req.params.id
+
+     try {
+       const targeted_employee=await Employee.findByPk(targeted_employee_id,{
+         include:[
+           {model:EmployeeInfo, as:"EmployeeInfoDetail"},
+            {
+          model: EmployeeRole,
+          as: "EmployeeRoleDetail",
+          // Include the CompanyRoles model to get the role name
+          include: {
+            model: CompanyRoles,
+            as: "CompanyRoleDetail",
+            attributes: ['company_role_name']
+          }
+        }
+            ]
+       })
+
+       if (!targeted_employee) {
+         return res.status(StatusCodes.BAD_REQUEST).json({msg:"the employee does not exist"})
+       }
+
+       const employeeInfo=targeted_employee.EmployeeInfoDetail
+       const employeeRole=targeted_employee.EmployeeRoleDetail.CompanyRoleDetail
+       const romeName=employeeRole? targeted_employee.EmployeeRoleDetail.CompanyRoleDetail.company_role_name :null;
+       const fullName=employeeInfo? `${employeeInfo.employee_first_name} ${employeeInfo.employee_last_name}` :null;
+   
+      return res.status(StatusCodes.OK).json({msg:"employee fetched successfully",
+        employee:{
+           id:targeted_employee.employee_id,
+           email:targeted_employee.employee_email,
+           name:fullName,
+           status:targeted_employee.employee_active_status,
+           phonenumber: employeeInfo ? employeeInfo.employee_phone : null,
+           role: romeName
+        }
+      })
+     } 
+     catch (error) {
+       if (error) {
+         console.log(error)
+         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({msg:"something went wrong"})
+       }
+     }
+}
 
 
 
@@ -179,6 +239,7 @@ async function deleteEmployee(req,res) {
 
 
 
-module.exports={addEmployee,geAllEmployee,updateEmployee,deleteEmployee}
+
+module.exports={addEmployee,geAllEmployee,updateEmployee,deleteEmployee,getSingleEmployee}
 
 
