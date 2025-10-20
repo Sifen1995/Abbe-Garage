@@ -17,11 +17,17 @@ async function seedAdmin( ) {
         return
     }
 
-    let adminRole = await CompanyRoles.findOne({ where: { company_role_name: 'admin' } });
-  if (!adminRole) {
-    adminRole = await CompanyRoles.create({ company_role_name: 'admin' });
-    console.log('✅ Created company role: admin');
-  }
+   let [adminRole, created] = await CompanyRoles.findOrCreate({
+  where: { company_role_name: 'admin' },
+  defaults: { company_role_name: 'admin' },
+});
+
+if (created) {
+  console.log("✅ Created company role: admin");
+} else {
+  console.log("ℹ️ Admin role already exists.");
+}
+
 
   const employee=await Employee.create({
     employee_email:process.env.ADMINEMAIL,

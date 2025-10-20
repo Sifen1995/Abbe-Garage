@@ -10,6 +10,10 @@ const EmployeePassword = sequelize.define("employee_password", {
   employee_id: {
     type: DataTypes.INTEGER.UNSIGNED,
     allowNull: false,
+    references: {
+        model: "employee", 
+        key: "employee_id",
+      },
   },
   employee_password_hashed: {
     type: DataTypes.STRING(255),

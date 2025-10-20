@@ -14,7 +14,7 @@ const Vehicle=require("./Vehicle")
 
 
 Employee.hasOne(EmployeeInfo, { foreignKey: "employee_id", onDelete:'CASCADE', as: 'EmployeeInfoDetail' }); 
-EmployeeInfo.belongsTo(Employee, { foreignKey: "employee_id" });
+EmployeeInfo.belongsTo(Employee, { foreignKey: "employee_id",as: 'EmployeeInfoDetail' });
 
 Employee.hasOne(EmployeePassword, { foreignKey: 'employee_id', onDelete: 'CASCADE', as: 'PasswordDetail' }); 
 EmployeePassword.belongsTo(Employee,{ foreignKey: "employee_id" });
@@ -26,7 +26,7 @@ CompanyRoles.hasMany(EmployeeRole, { foreignKey: "company_role_id", onDelete: "S
 EmployeeRole.belongsTo(CompanyRoles, { foreignKey: "company_role_id", as: 'CompanyRoleDetail' }); 
 
 Customer_identifier.hasOne(Customer_info, { foreignKey: "customer_id", onDelete:'CASCADE', as: 'CustomerInfoDetail' }); 
-Customer_info.belongsTo(Customer_identifier, { foreignKey: "customer_id" });
+Customer_info.belongsTo(Customer_identifier, { foreignKey: "customer_id", as: 'CustomerInfoDetail' });
 
 Customer_identifier.hasMany(Vehicle, { foreignKey: "customer_id", onDelete:'CASCADE', as: 'CustomerVehicleInfo' }); 
 Vehicle.belongsTo(Customer_identifier,{foreignKey:"customer_id"})
@@ -40,14 +40,16 @@ Orders.belongsTo(Employee,{foreignKey:"employee_id"})
 Orders.hasOne(OrderInfo,{foreignKey:"order_id", onDelete:'CASCADE',as:'OrderInfoDetail'})
 OrderInfo.belongsTo(Orders,{foreignKey:"order_id"})
 
-Orders.hasMany(OrderStatus,{foreignKey:"order_id", onDelete:'CASCADE',as:'OrderStatusDetail'})
-OrderStatus.belongsTo(Orders,{foreignKey:"order_id"})
+// Orders.hasMany(OrderStatus,{foreignKey:"order_id", onDelete:'CASCADE',as:'OrderStatusDetail'})
+// OrderStatus.belongsTo(Orders,{foreignKey:"order_id",as:'OrderStatusDetail'})
 
-Orders.hasMany(OrderService,{foreignKey:"order_id", onDelete:'CASCADE',as:'OrderServiceDetail'})
-OrderService.belongsTo(Orders,{foreignKey:"order_id"})
+Orders.belongsTo(OrderStatus, { foreignKey: 'order_status_id', as: 'OrderStatusDetail' })
+
+Orders.hasOne(OrderService,{foreignKey:"order_id", onDelete:'CASCADE',as:'OrderServiceDetail'})
+OrderService.belongsTo(Orders,{foreignKey:"order_id",as:'OrderServiceDetail'})
 
 CommonService.hasMany(OrderService,{foreignKey:'service_id' ,onDelete:'CASCADE',  as: 'CommonServiceOrder'})
-OrderService.belongsTo(CommonService,{foreignKey:"service_id"})
+OrderService.belongsTo(CommonService,{foreignKey:"service_id", as: 'CommonServiceOrder'})
 
 module.exports = {
  Employee,

@@ -11,6 +11,15 @@ const Customer_info = sequelize.define(
       allowNull: false,
     },
 
+    customer_id:{
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: "customers", 
+        key: "customer_id",
+      },
+    },    
+
     customer_first_name: {
       type: DataTypes.STRING,
       allowNull: true,

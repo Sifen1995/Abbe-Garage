@@ -22,7 +22,7 @@ const OrderService = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: "common_service", 
+        model: "common_services", 
         key: "service_id",
       },
     },

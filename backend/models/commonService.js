@@ -2,7 +2,7 @@ const { DataTypes } = require("sequelize");
 const sequelize = require("../config/db.config");
 
 const CommonService = sequelize.define(
-  "common_service",
+  "common_services",
   {
     service_id: {
       type: DataTypes.INTEGER,
@@ -20,7 +20,7 @@ const CommonService = sequelize.define(
     },
   },
   {
-    tableName: "common_service",
+    tableName: "common_services",
     timestamps: false,
   }
 );

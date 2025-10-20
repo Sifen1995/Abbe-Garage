@@ -34,14 +34,27 @@ const Orders = sequelize.define(
       type: DataTypes.STRING(255),
       allowNull: true,
     },
-    order_status: {
-      type: DataTypes.STRING(255),
-      allowNull: true,
+     order_status_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+       references: {
+        model: "order_status", 
+        key: "order_status_id",
+      },
+    },
+
+    vehicle_id: {
+      type: DataTypes.INTEGER,      
+      allowNull: false,
+      references: {
+        model: "vehicles", 
+        key: "vehicle_id",
+      },
     },
   },
   {
     tableName: "orders",
-    timestamps: false, // disable createdAt/updatedAt
+    timestamps: false, 
   }
 );
 

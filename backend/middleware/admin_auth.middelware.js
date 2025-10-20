@@ -17,7 +17,7 @@ async function adminAuthMiddleware(req, res, next) {
 
 
 
-    if (payload.companyRoleId !== 1) { // Checks if the role ID is not 1 (the admin role)
+    if (payload.companyRoleId !== 13) { // Checks if the role ID is not 1 (the admin role)
       return res
         .status(StatusCodes.FORBIDDEN)
         .json({ msg: "Access Forbidden: Insufficient privileges" });

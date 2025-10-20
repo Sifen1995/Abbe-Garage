@@ -3,7 +3,7 @@ const sequelize = require('../config/db.config');
 const bcrypt=require("bcrypt")
 const {Customer_identifier,Vehicle}=require("../models/index")
 const {StatusCodes}=require("http-status-codes");
-const { Transaction } = require("sequelize");
+
 
 
 async function getOneVehicle(req,res) {
@@ -67,7 +67,7 @@ try {
 catch (error) {
     await t.rollback()
     console.log(error)
-    return res.status(500).json({ message: err.message }); 
+    return res.status(500).json({msg:"somehing went wrong" }); 
 }
 }
 
@@ -93,6 +93,9 @@ async function deleteVehicle(req,res) {
 async function getAllVehicles(req,res) {
    try {
       const vehicles=await Vehicle.findAll()
+       if (vehicles.length===0) {
+         return res.status(StatusCodes.BAD_REQUEST).json({msg:"no vehicle avilabel"})
+       }
       const formattedVehicle=vehicles.map(vehicle=>{
         return {
         id: vehicle.vehicle_id,

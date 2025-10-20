@@ -15,12 +15,14 @@ server.get("",(req,res)=>{
 const sequelize = require('./config/db.config');
 const { Employee } = require('./models');
 
-sequelize.sync()
+
+
+sequelize.authenticate()
   .then(() => {
-    console.log("✅ All tables synced");
-    seedAdmin(); // now safe to run
+    console.log("✅ Database connected");
+    seedAdmin();
   })
-  .catch((err) => console.error("❌ Sync error:", err));
+  .catch((err) => console.error("❌ DB connection error:", err));
 
 
 //section for auth routeing
@@ -51,10 +53,22 @@ server.use(express.json())
 server.use("/api/vehicle",vehicle_route)
 
 
+//section for common service routeing
+const service_route=require('./routes/adminService')
+server.use(express.json())
+
+server.use("/api/services",service_route)
+
+//section for order routeing
+const order_route=require('./routes/adminOrder')
+server.use(express.json())
+
+server.use("/api/orders",order_route)
 
 
-
-
+const customerPortalRoutes = require('./routes/customerPortal');
+server.use(express.json())
+server.use('/api/public', customerPortalRoutes);
 
 
 

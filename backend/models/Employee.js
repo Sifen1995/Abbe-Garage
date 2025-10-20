@@ -7,7 +7,7 @@ const Employee = sequelize.define("employee", {
     primaryKey: true,
     allowNull: false,
     autoIncrement: true,
-  },
+       },
   employee_email: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -20,11 +20,11 @@ const Employee = sequelize.define("employee", {
   },
   employee_added_date: {
     type: DataTypes.DATE,
-    defaultValue: DataTypes.NOW,
+    defaultValue: DataTypes.NOW,  
   },
 }, {
   tableName: "employee",  // ✅ Prevents Sequelize from pluralizing
   timestamps: false,
 });
 
-module.exports = Employee;
+module.exports = Employee;  

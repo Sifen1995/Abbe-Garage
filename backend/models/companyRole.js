@@ -15,7 +15,7 @@ const Company_roles=sequelize.define("company_roles",{
    }
 },
 { tableName: 'company_roles',
-  timestamps: false
+  timestamps: false 
 
 }
 )

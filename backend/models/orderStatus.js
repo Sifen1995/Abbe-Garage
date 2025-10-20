@@ -10,21 +10,15 @@ const OrderStatus = sequelize.define(
       autoIncrement: true,
       allowNull: false,
     },
-    order_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: "orders",
-        key: "order_id",
-      },
-    },
+   
     order_status: {
-      type: DataTypes.STRING(100),
+     type: DataTypes.ENUM('Pending','In Progress','On Hold','Completed','Delivered', 'Cancelled'),  
       allowNull: false,
+      defaultValue: "pending",
     },
   },
   {
-    tableName: "order_statuses",
+    tableName: "order_status",
     timestamps: false, 
   }
 );

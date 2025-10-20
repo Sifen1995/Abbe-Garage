@@ -81,6 +81,10 @@ async function geAllEmployee(req, res) {
       ]
     });
 
+     if (allEmployee.length===0) {
+             return res.status(StatusCodes.BAD_REQUEST).json({msg:"no employee avilabel"})
+           }
+
     const formattedEmployees = allEmployee.map(emp => {
       // Safely access nested data using the correct aliases
       const fullName = `${emp.EmployeeInfoDetail.employee_first_name} ${emp.EmployeeInfoDetail.employee_last_name}`;
@@ -163,7 +167,7 @@ async function updateEmployee(req, res) {
 
   } catch (err) {
     await t.rollback();
-    return res.status(500).json({ message: err.message });
+    return res.status(500).json({ msg:"somehing went wrong" });
   }
 }
 

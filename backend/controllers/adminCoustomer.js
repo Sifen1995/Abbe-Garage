@@ -15,6 +15,9 @@ async function getAllCustomers(req, res) {
       ]
     });
 
+      if (customers.length===0) {
+         return res.status(StatusCodes.BAD_REQUEST).json({msg:"no customers avilabel"})
+       }
     const formatedCustomer = customers.map(customer => {
       const fullName = `${customer.CustomerInfoDetail.customer_first_name} ${customer.CustomerInfoDetail.customer_last_name}`;
 
@@ -153,7 +156,7 @@ async function updateCustomer(req,res) {
   } 
   catch (error) {
      await t.rollback();
-    return res.status(500).json({ message: err.message });
+    return res.status(500).json({ msg:"somehing went wrong" });
   }
 }
 

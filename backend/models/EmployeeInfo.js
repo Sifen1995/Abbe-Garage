@@ -10,6 +10,10 @@ const EmployeeInfo = sequelize.define("employee_info", {
   employee_id: {
     type: DataTypes.INTEGER.UNSIGNED,
     allowNull: false,
+    references: {
+        model: "employee", 
+        key: "employee_id",
+      },
   },
   employee_first_name: {
     type: DataTypes.STRING(255),
@@ -17,7 +21,7 @@ const EmployeeInfo = sequelize.define("employee_info", {
   },
   employee_last_name: {
     type: DataTypes.STRING(255),
-    allowNull: true,
+    allowNull: true, 
   },
   employee_phone: {
     type: DataTypes.STRING(255),
