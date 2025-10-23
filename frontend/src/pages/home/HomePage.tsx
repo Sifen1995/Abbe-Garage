@@ -1,4 +1,5 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom';
 import Layout from '../../components/layout/Layout'
 import heroImage from '../../assets/hero.jpg'
 import YouTubeIcon from '@mui/icons-material/YouTube';
@@ -17,14 +18,19 @@ import award from '../../assets/award.png'
 import tag from '../../assets/tag.png'
 
 export default function HomePage() {
+
+  const navigate=useNavigate()
+
+  const handelContact=()=>{
+    navigate('/contact')
+  }
   return (
     <Layout>
       {/* hero */}
       <section className="h-[80vh]  bg-cover bg-center bg-no-repeat text-white flex items-center p-8 md:p-16 relative"
         style={{ 
-         backgroundImage: `url('${heroImage}')`, // Replace with your image path
-          // Overlay to darken the background image
-          // backgroundBlendMode: 'multiply',         
+         backgroundImage: `url('${heroImage}')`, 
+                  
         }}>
          <div className="absolute inset-0 "></div>
         <div className="relative z-10">
@@ -50,19 +56,18 @@ export default function HomePage() {
         {/* Left Column (Images) */}
         <div className="w-full md:w-1/2 lg:w-5/12 relative h-96 md:h-auto mb-8 md:mb-0">
           <div className="flex justify-center md:justify-end space-x-2">
-    {/* Image 1: Adjust width, remove full width on mobile for better thinness */}
+    
     <img 
         src={oilimage2}
         alt="Car Maintenance" 
         className="w-4/12 md:w-3/12 h-64 object-cover shadow-2xl"
     />
     
-    {/* Image 2: Adjust width AND remove mt-16 to align tops */}
+    
     <img 
         src={oilimage}
         alt="Engine Details" 
-        // W-4/12 makes it thin on ALL screen sizes (sm:block means it's still hidden on small screens)
-        // REMOVED: mt-16
+        
         className="w-4/12 md:w-3/12 h-64 object-cover shadow-2xl hidden sm:block" 
     />
 </div>
@@ -268,7 +273,7 @@ export default function HomePage() {
         className="flex-1 bg-cover bg-center" 
         style={{ backgroundImage: `url(${carDashboard})` }}
       >
-        {/* This div is intentionally left empty. The image is set as a background. */}
+       
       </div>
     </section>
 
@@ -392,7 +397,7 @@ export default function HomePage() {
 
     <div className="flex flex-col md:flex-row items-center gap-5">
       <p className="text-2xl font-bold tracking-wide">1800.456.7890</p>
-      <button className="bg-white text-red-600 font-semibold px-6 py-3 rounded hover:bg-gray-100 transition flex items-center gap-2">
+      <button className="bg-white text-red-600 font-semibold px-6 py-3 rounded hover:bg-gray-100 transition flex items-center gap-2" onClick={handelContact}>
         Contact Us →
       </button>
     </div>
