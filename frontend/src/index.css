@@ -2,3 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+
+@layer components {
+  .container-section {
+    @apply max-w-7xl mx-auto px-6 sm:px-8 lg:px-12;
+  }
+}
+
+

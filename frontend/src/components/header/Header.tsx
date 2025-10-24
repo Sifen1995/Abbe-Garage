@@ -43,7 +43,7 @@ export default function Header() {
           <ul className="flex gap-6 font-medium text-gray-700">
             <li className="hover:text-blue-600 cursor-pointer">Home</li>
             <li className="hover:text-blue-600 cursor-pointer">Service</li>
-            <li className="hover:text-blue-600 cursor-pointer">About Us</li>
+            <li className="hover:text-blue-600 cursor-pointer"><Link to={'/about'}>About Us</Link></li>
             <li className="hover:text-blue-600 cursor-pointer"><Link to={'/contact'}>Contact Us</Link></li>
           </ul>
           {
