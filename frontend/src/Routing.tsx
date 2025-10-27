@@ -9,6 +9,8 @@ import AdminDashboard from "./pages/admin/adminDashboard";
 import AddCustomer from "./components/admin/customer/addCustomer";
 import AddEmployee from "./components/admin/employee/addEmployee";
 import UpdateCustomer from "./components/admin/customer/updateCustomer";
+import Admin from "./components/admin/dasheboard/admin";
+import AllCustomers from "./components/admin/customer/allCustomers";
 
 export default function Routing() {
   
@@ -21,13 +23,18 @@ export default function Routing() {
         <Route path="/login" element={<Login/>}/>
         <Route path="/contact" element={<Contact/>}/>
         <Route path="/about" element={<About/>}/>
+        <Route path="/" element={<HomePage/>}/>
         {/* protected routes */}
-         <Route path="/" element={<ProtectedRoute><HomePage/></ProtectedRoute>}/>
+        
    <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>}>
           
           <Route path="addcustomer" element={<AddCustomer />} /> 
-          <Route path="addemployee" element={<AddEmployee />} /> 
-          <Route path="updatecustomer" element={<UpdateCustomer />} /> 
+          <Route path="addemployee" element={<AddEmployee />} />           
+          <Route path="customers" element={<AllCustomers />}>
+          <Route path="updatecustomer" element={<UpdateCustomer/>} />
+        </Route>
+          <Route path="" element={<Admin/>} /> 
+
         </Route>
         
 

@@ -25,7 +25,8 @@ async function getAllCustomers(req, res) {
         id: customer.customer_id,
         fullName: fullName,
         email: customer.customer_email,
-        status: customer.customer_active_status,
+        phoneNumber:customer.customer_phone_number,
+        status: customer.CustomerInfoDetail.customer_active_status,
         createdAt: customer.customer_added_date
       }
     });
