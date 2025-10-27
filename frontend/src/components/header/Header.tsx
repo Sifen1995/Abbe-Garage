@@ -45,6 +45,7 @@ export default function Header() {
             <li className="hover:text-blue-600 cursor-pointer">Service</li>
             <li className="hover:text-blue-600 cursor-pointer"><Link to={'/about'}>About Us</Link></li>
             <li className="hover:text-blue-600 cursor-pointer"><Link to={'/contact'}>Contact Us</Link></li>
+             <li className="hover:text-blue-600 cursor-pointer"><Link to={'/admin'}>Admin</Link></li>
           </ul>
           {
            isAuthenticated?(<button type='button' className="ml-6 bg-blue-900 text-white px-4 py-2 rounded hover:bg-blue-700" onClick={handelLogOut} >log out</button>):( <button
