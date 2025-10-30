@@ -1,17 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import type { Customer } from '../../types/customer';
 import EditIcon from '@mui/icons-material/Edit';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import instance from '../../Api/axios';
 
-
-const customerData: Customer[] = [
-  { id: 38, fullName: 'Tewdaj Alemu', email: "tewdaj@evangadi.com", phoneNumber: "90987766", createdAt: "05-31-2023 | 14:15", status: "Yes" },
-  { id: 37, fullName: "Jasmine Bekele", email: "jasmine@gmail.com", phoneNumber: "240835487", createdAt: "05-24-2023 | 16:25", status: "Yes" },
-  { id: 36, fullName: "Edom Samuel", email: "edom@gmail.com", phoneNumber: "2402542541", createdAt: "05-22-2023 | 20:00", status: "Yes" },
-  { id: 35, fullName: "Biniam Biggt", email: "bbiggt@marketwatch.com", phoneNumber: "188-190-8935", createdAt: "05-20-2023 | 10:00", status: "Yes" },
-  { id: 34, fullName: "Sara Riseley", email: "sriseleys@forbes.com", phoneNumber: "494-519-5915", createdAt: "05-20-2023 | 10:00", status: "Yes" },
-];
 
 
 function splitFullName(fullName: string): { firstName: string; lastName: string } {
@@ -34,8 +28,54 @@ const ViewAction = () => (
   </span>
 );
 
+
+
 const CustomerTable: React.FC = () => {
-  const headers = ["ID", "First Name", "Last Name", "Email", "Phone", "Added Date", "Active", "Actions"];
+
+const [customers,setCustomers]=useState<Customer[]>([])
+const [error, setError] = useState<string | null>(null);
+const [isLoading, setIsLoading] = useState<boolean>(true);
+const {authToken}=useAuth()
+const headers = ["ID", "First Name", "Last Name", "Email", "Phone", "Added Date", "Active", "Actions"];
+
+
+
+async function fetchCustomers() {
+     if (!authToken) {
+            setError("Authentication token not found.");
+            setIsLoading(false);
+            return;
+        }
+
+   try {     
+     setIsLoading(true); 
+     setError(null);
+
+     const response=await instance.get('/customers',{
+       headers: {
+                    
+                    'Authorization': `Bearer ${authToken}` 
+                }
+     })
+
+     setCustomers(response.data.customers);
+
+   } 
+   catch (error) {
+     console.error("Fetch Customers Error:", error);
+            setError("Failed to retrieve customer list."); 
+            setCustomers([]);
+   }
+
+   finally {
+           
+            setIsLoading(false); 
+        }
+}
+
+useEffect(()=>{
+   fetchCustomers()
+},[authToken])
 
   return (
     <div className=" bg-white rounded-lg shadow-xl overflow-x-auto">
@@ -56,7 +96,7 @@ const CustomerTable: React.FC = () => {
 
         {/* Table Body */}
         <tbody>
-          {customerData.map((customer, index) => {
+          {customers.map((customer, index) => {
             const { firstName, lastName } = splitFullName(customer.fullName);
 
             return (
