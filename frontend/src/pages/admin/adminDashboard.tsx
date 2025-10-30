@@ -2,7 +2,7 @@ import React from "react";
 import { Outlet } from "react-router-dom";
 import Layout from "../../components/layout/Layout";
 import Sidebar from "../../components/admin/sideBar";
-import AddCustomer from "../../components/admin/customer/addCustomer";
+
 
 export default function AdminDashboard() {
   return (
