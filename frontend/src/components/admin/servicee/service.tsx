@@ -1,7 +1,24 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import type { Serivce } from '../../../types/service'
 import { useAuth } from '../../context/AuthContext'
 import instance from '../../../Api/axios'
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import AddService from './addService';
+
+
+
+const Edit = () => (
+  <span className="text-gray-600 hover:text-blue-600 transition-colors cursor-pointer text-base">
+    <EditIcon />
+  </span>
+);
+
+const Delete = () => (
+  <span className="text-gray-600 hover:text-blue-600 transition-colors cursor-pointer text-base ml-2">
+    <DeleteIcon />
+  </span>
+);
 
 export default function Service() {
 
@@ -25,7 +42,7 @@ export default function Service() {
                 }
            }) 
 
-           setService(response.data.servicese)
+           setService(response.data.service)
         } 
         catch (error) {
             console.error("Fetch service Error:", error);
@@ -36,6 +53,10 @@ export default function Service() {
             setIsLoading(false); 
         }
     }
+
+    useEffect(()=>{
+      fetchServices()
+    },[authToken])
     
   return (
     <div className='ml-10 mr-10 mt-6'>
@@ -45,10 +66,41 @@ export default function Service() {
         </div>
 
        <div>
-        
+         {services.map((service,index)=>(
+            
+            <div 
+            // Alternating gray background (optional, based on common table design)
+            className={`flex justify-between items-center py-5 border-b border-gray-200 ${
+                index % 2 === 0 ? 'bg-white' : 'bg-gray-50'
+            } transition-colors duration-200 px-4`}  key={service.id}
+        >
+           
+            {/* Left Section: Title and Description */}
+            <div className="flex-1 pr-6" >
+                
+                <h3 className="text-xl font-bold text-[#002060] mb-1">
+                    {service.name}
+                </h3>
+                <p className="text-sm text-gray-700 max-w-3xl">
+                    {service.description}
+                </p>
+            </div>
+
+            {/* Right Section: Action Icons */}
+            <div className="flex items-center space-x-3 flex-shrink-0">
+                {/* Red Edit Icon */}
+                <Edit /> 
+                
+                {/* Black Delete Icon */}
+                <Delete /> 
+            </div>
+        </div>
+         ))}
        </div>
 
-        <div></div>
+        <div>
+            <AddService/>
+        </div>
     </div>
   )
 }

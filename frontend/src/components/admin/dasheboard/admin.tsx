@@ -85,7 +85,7 @@ export default function Admin() {
 
               <div className="flex justify-between items-end mt-6">
                 <p className="text-sm font-semibold text-red-600 cursor-pointer hover:underline">
-                   <Link to={'/'}> READ MORE +</Link>
+                   <Link to={'employees'}> READ MORE +</Link>
                 </p>
                 <div className="flex items-center justify-center w-12 h-12 rounded-full bg-gray-100">
                   <img src={s2} alt="icon" className="w-8 h-8 opacity-70" />
@@ -197,7 +197,7 @@ export default function Admin() {
 
               <div className="flex justify-between items-end mt-6">
                 <p className="text-sm font-semibold text-red-600 cursor-pointer hover:underline">
-                   <Link to={'addemployee'}> READ MORE +</Link>
+                   <Link to={'services'}> READ MORE +</Link>
                 </p>
                 <div className="flex items-center justify-center w-12 h-12 rounded-full bg-gray-100">
                   <img src={s1} alt="icon" className="w-8 h-8 opacity-70" />
@@ -220,7 +220,7 @@ export default function Admin() {
 
               <div className="flex justify-between items-end mt-6">
                 <p className="text-sm font-semibold text-red-600 cursor-pointer hover:underline">
-                   
+                   <Link to={'services'}> READ MORE +</Link>
                 </p>
                 <div className="flex items-center justify-center w-12 h-12 rounded-full bg-gray-100">
                   <img src={s6} alt="icon" className="w-8 h-8 opacity-70" />

@@ -13,6 +13,7 @@ import Admin from "./components/admin/dasheboard/admin";
 import AllCustomers from "./components/admin/customer/allCustomers";
 import AllEmployees from "./components/admin/employee/allEmployee";
 import Service from "./components/admin/servicee/service";
+import UpdateEmployee from "./components/admin/employee/updateEmployee";
 
 export default function Routing() {
   
@@ -36,7 +37,9 @@ export default function Routing() {
           <Route path="updatecustomer" element={<UpdateCustomer/>} />
            </Route>
           <Route path="" element={<Admin/>} /> 
-          <Route path="employees" element={<AllEmployees/>} />
+          <Route path="employees" element={<AllEmployees/>}> 
+             <Route path="updateemployee" element={<UpdateEmployee/>} />
+          </Route>
           <Route path="services" element={<Service/>} />
         </Route>
         

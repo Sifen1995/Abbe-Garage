@@ -1,10 +1,17 @@
 import React from 'react'
 import SearchIcon from '@mui/icons-material/Search';
 import CustomerTable from '../../tables/customerTable';
+import { Outlet } from 'react-router-dom';
 
 export default function AllCustomers() {
-  return (
-    <>
+
+  const path = window.location.pathname;
+
+
+  if (path.endsWith('/customers')) {
+    // If on the parent route, display the main content (the table)
+    return (
+      <>
       <div className='flex flex-col ml-10 mt-6'>
         <h1 className='text-[40px] font-bold text-blue-950'>Customers</h1>
          <div className='flex items-center w-full max-w-xl border border-gray-300 rounded-lg overflow-hidden shadow-sm focus-within:ring-2 focus-within:ring-blue-500 transition duration-150 mt-[4%]'>
@@ -28,5 +35,14 @@ export default function AllCustomers() {
     </div>
       </div>
     </>
-  )
+    );
+  } else {
+    
+    return (
+      <div className="p-8">
+        <Outlet /> 
+      </div>
+    );
+  }
+  
 }
