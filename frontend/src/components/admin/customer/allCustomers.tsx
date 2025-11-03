@@ -1,48 +1,50 @@
-import React from 'react'
+
+
+import React from 'react';
+import { Outlet, useLocation } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
 import CustomerTable from '../../tables/customerTable';
-import { Outlet } from 'react-router-dom';
+import CustomerProfile from './customerProfile';
 
 export default function AllCustomers() {
+  const location = useLocation();
 
-  const path = window.location.pathname;
+  const isMainCustomersPage = location.pathname === '/admin/customers';
+  const isCustomerProfilePage = location.pathname.includes('/admin/customers/profile');
 
+  return (
+    <>
+      {isMainCustomersPage ? (
+        // If on "/admin/customers", show the customer list
+        <div className="flex flex-col ml-10 mt-6">
+          <h1 className="text-[40px] font-bold text-blue-950">Customers</h1>
 
-  if (path.endsWith('/customers')) {
-    // If on the parent route, display the main content (the table)
-    return (
-      <>
-      <div className='flex flex-col ml-10 mt-6'>
-        <h1 className='text-[40px] font-bold text-blue-950'>Customers</h1>
-         <div className='flex items-center w-full max-w-xl border border-gray-300 rounded-lg overflow-hidden shadow-sm focus-within:ring-2 focus-within:ring-blue-500 transition duration-150 mt-[4%]'>
-      
-      {/* 2. Input Field: Takes most of the space, no border/outline (handled by parent) */}
-      <input 
-        type="text" 
-        placeholder="Search..."
-        className="flex-grow px-4 py-2 text-gray-700 placeholder-gray-500 bg-white focus:outline-none"
-      />
-      
-      {/* 3. Icon Wrapper: Fixed size, centered icon, acts as a button/visual aid */}
-      <div className='flex items-center justify-center h-full px-3 bg-gray-50 text-gray-500 cursor-pointer hover:bg-gray-100 transition duration-150'>
-        {/* The Icon Component */}
-        <SearchIcon className="w-5 h-5" /> 
-      </div>
-    </div>
-  {/* table */}
-    <div className='mt-[7%]'>
-     <CustomerTable/>
-    </div>
-      </div>
+          {/* Search Bar */}
+          <div className="flex items-center w-full max-w-xl border border-gray-300 rounded-lg overflow-hidden shadow-sm focus-within:ring-2 focus-within:ring-blue-500 transition duration-150 mt-[4%]">
+            <input
+              type="text"
+              placeholder="Search..."
+              className="flex-grow px-4 py-2 text-gray-700 placeholder-gray-500 bg-white focus:outline-none"
+            />
+            <div className="flex items-center justify-center h-full px-3 bg-gray-50 text-gray-500 cursor-pointer hover:bg-gray-100 transition duration-150">
+              <SearchIcon className="w-5 h-5" />
+            </div>
+          </div>
+
+          {/* Customer Table */}
+          <div className="mt-[7%]">
+            <CustomerTable />
+          </div>
+        </div>
+      ) :isCustomerProfilePage ? (
+        // Otherwise, show nested route (like UpdateCustomer)
+        <div className="p-8 w-full"><CustomerProfile/></div>
+      ):(
+        <div className="p-8 w-full">
+          <Outlet />
+        </div>
+      )}
     </>
-    );
-  } else {
-    
-    return (
-      <div className="p-8">
-        <Outlet /> 
-      </div>
-    );
-  }
-  
+  );
 }
+

@@ -103,7 +103,7 @@ async function getOneCustomer(req,res){
             customer: {
                 id: targeted_customer.customer_id,
                 email: targeted_customer.customer_email,
-                phone: targeted_customer.customer_phone_number,
+                phoneNumber: targeted_customer.customer_phone_number,
                 fullName,
                 status: customerInfo ? customerInfo.customer_active_status : null
             }
