@@ -5,6 +5,7 @@ import type { Customer } from "../../../types/customer";
 import { useAuth } from "../../context/AuthContext";
 import { useParams } from "react-router-dom";
 import instance from "../../../Api/axios";
+import VehiclesOfCustomer from "../../tables/vehiclesOfCustomer";
 
 export default function CustomerProfile() {
 
@@ -97,9 +98,14 @@ export default function CustomerProfile() {
           <h3 className="text-lg font-semibold text-blue-900">
             Vehicles of {customer?.fullName}
           </h3>
-          <div className="bg-white mt-3 shadow-md rounded-md p-4 text-gray-500">
-            No vehicle found
-          </div>
+          {
+            customer?.id ?(<VehiclesOfCustomer customerId={customer.id}/>):(
+               <div className="bg-white mt-3 shadow-md rounded-md p-4 text-gray-500">
+                No vehicle found
+              </div>
+            )
+          }
+         
           <button className="mt-4 bg-red-600 text-white px-5 py-2 rounded-md hover:bg-red-700 transition">
             ADD NEW VEHICLE
           </button>
