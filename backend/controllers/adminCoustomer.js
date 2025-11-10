@@ -1,7 +1,7 @@
 const db=require("../config/db.config")
 const sequelize = require('../config/db.config');
 const bcrypt=require("bcrypt")
-const{Customer_identifier,Customer_info,Vehicle}=require("../models/index")
+const{Customer_identifier,Customer_info,Vehicle,Orders,OrderInfo,OrderService,OrderStatus,CommonService}=require("../models/index")
 const {StatusCodes}=require("http-status-codes")
 
 async function getAllCustomers(req, res) {
@@ -265,4 +265,50 @@ async function addVehicle(req,res) {
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({msg:"something went wrong"})
   }
 }
-module.exports={getAllCustomers,addCustomer,getOneCustomer,updateCustomer,deleteCustomer,getAllVehiclesForSingleUser,addVehicle}
+
+
+async function getOrderByCustomer(req,res) {
+     const { customerId } = req.params;
+
+  try {
+    const orders = await Orders.findAll({
+      where: { customer_id: customerId },
+      attributes: ['order_id', 'order_date', 'vehicle_id', 'employee_id'],
+      include: [
+        {
+          model: OrderInfo,
+          as: 'OrderInfoDetail',
+          attributes: ['order_total_price', 'order_estimated_completion_date']
+        },
+        {
+          model: OrderStatus,
+          as: 'OrderStatusDetail',
+          attributes: ['order_status']
+        },
+        {
+          model: OrderService,
+          as: 'OrderServiceDetail',
+          attributes: ['service_completed'],
+          include: [
+            {
+              model: CommonService,
+              as: 'CommonServiceOrder',
+              attributes: ['service_name']
+            }
+          ]
+        }
+      ]
+    });
+
+    return res.status(StatusCodes.OK).json({
+      msg: 'Orders fetched successfully',
+      orders
+    });
+  } catch (error) {
+    console.error('Error fetching customer orders:', error);
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ msg: 'Failed to fetch customer orders' });
+  }    
+}
+module.exports={getAllCustomers,getOrderByCustomer,addCustomer,getOneCustomer,updateCustomer,deleteCustomer,getAllVehiclesForSingleUser,addVehicle}
