@@ -6,6 +6,7 @@ import { useAuth } from "../../context/AuthContext";
 import { useParams } from "react-router-dom";
 import instance from "../../../Api/axios";
 import VehiclesOfCustomer from "../../tables/vehiclesOfCustomer";
+import OrdersOfCustomer from "../../tables/orderOfCustomer";
 
 export default function CustomerProfile() {
 
@@ -116,7 +117,7 @@ export default function CustomerProfile() {
           <h3 className="text-lg font-semibold text-blue-900">
             Orders of {customer?.fullName}
           </h3>
-          <p className="text-gray-500 mt-2">Orders will be displayed here</p>
+          <p className="text-gray-500 mt-2"><OrdersOfCustomer customerId={customer!.id}/></p>
         </div>
       </div>
     </div>
