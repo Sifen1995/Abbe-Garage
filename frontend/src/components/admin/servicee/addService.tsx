@@ -1,65 +1,112 @@
-import React from 'react'
+import React, { useState } from "react";
+import { useAuth } from "../../context/AuthContext";
+import instance from "../../../Api/axios";
 
 export default function AddService() {
+  const [formData, setFormData] = useState({
+    name: "",
+    description: ""
+  });
+
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
+  const { authToken } = useAuth();
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+    setSuccess(null);
+
+    try {
+      console.log("Submitting:", formData);
+
+      const response = await instance.post(
+        "/services",
+        {
+          name: formData.name,
+          description: formData.description // <-- FIXED HERE
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${authToken}`
+          }
+        }
+      );
+
+      setSuccess("Service added successfully");
+      setFormData({
+        name: "",
+        description: ""
+      });
+    } catch (err: any) {
+      console.error("Add service error:", err.response?.data || err.message);
+      setError(
+        err.response?.data?.msg ||
+          "Failed to add service. Check input values."
+      );
+    }
+  };
+
   return (
     <>
       <div className="flex justify-center p-8 bg-gray-50 min-h-[50vh] mt-8">
-    {/* Outer container for the card */}
-    <div className="w-full max-w-2xl bg-white p-10 shadow-lg rounded-lg">
-        
-        {/* Title Section: "Add a new service" with red underline */}
-        <h2 className="text-2xl font-bold text-[#002060] mb-8 flex items-center">
+        <div className="w-full max-w-2xl bg-white p-10 shadow-lg rounded-lg">
+          <h2 className="text-2xl font-bold text-[#002060] mb-8 flex items-center">
             Add a new service
             <span className="ml-3 h-1 w-10 bg-red-600"></span>
-        </h2>
+          </h2>
 
-        {/* Form Fields Container */}
-        <div className="space-y-6">
-            
-            {/* 1. Service Name Input */}
-            <div className="relative">
-                <input 
-                    type="text" 
-                    id="serviceName"
-                    placeholder=" " /* Placeholder required for floating label trick */
-                    className="w-full px-4 pt-6 pb-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600 peer"
+          <form onSubmit={handleSubmit}>
+            <div className="space-y-6">
+              {/* Service Name */}
+              <div className="relative">
+                <input
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  id="serviceName"
+                  placeholder="Service name"
+                  className="w-full px-4 pt-6 pb-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600 peer"
                 />
-                {/* Floating Label Style */}
-                <label 
-                    htmlFor="serviceName"
-                    className="absolute top-2 left-4 text-sm text-gray-500 transition-all duration-200 transform peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:text-blue-600"
-                >
-                    Service name
-                </label>
-            </div>
-            
-            {/* 2. Service Description Textarea */}
-            <div className="relative">
+              </div>
+
+              {/* Service Description */}
+              <div className="relative">
                 <textarea
-                    id="serviceDescription"
-                    rows={8}
-                    placeholder=" "
-                    className="w-full px-4 pt-6 pb-2 border border-gray-300 rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-blue-600 peer"
+                  id="serviceDescription"
+                  rows={8}
+                  name="description"
+                  placeholder="Service description"
+                  value={formData.description}
+                  onChange={handleChange}
+                  className="w-full px-4 pt-6 pb-2 border border-gray-300 rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-blue-600 peer"
                 ></textarea>
-                {/* Floating Label Style */}
-                <label 
-                    htmlFor="serviceDescription"
-                    className="absolute top-2 left-4 text-sm text-gray-500 transition-all duration-200 transform peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:text-blue-600"
-                >
-                    Service description
-                </label>
-            </div>
-            
-            {/* 3. Add Service Button */}
-            <button
+              </div>
+
+              {/* Submit Button */}
+              <button
                 type="submit"
                 className="mt-6 px-6 py-3 bg-red-600 text-white font-semibold uppercase tracking-wider rounded-md shadow-md hover:bg-red-700 transition duration-200"
-            >
+              >
                 ADD SERVICE
-            </button>
+              </button>
+            </div>
+
+            {error && <p className="text-red-600 mt-4">{error}</p>}
+            {success && <p className="text-green-600 mt-4">{success}</p>}
+          </form>
         </div>
-    </div>
-</div>
+      </div>
     </>
-  )
+  );
 }

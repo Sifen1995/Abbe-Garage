@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useAuth } from '../../context/AuthContext';
 import instance from '../../../Api/axios';
-import { Email } from '@mui/icons-material';
+
 
 
 export default function AddEmployee() {
@@ -31,6 +31,10 @@ export default function AddEmployee() {
 
     try {
       console.log("Submitting:", formData);
+
+     
+console.log("Headers:", { Authorization: `Bearer ${authToken}` });
+
 
       const response = await instance.post(
         "/employees",
@@ -92,7 +96,7 @@ export default function AddEmployee() {
   >
     <option value="">Select Employee Role</option>
     <option value="Admin">Admin</option>
-    <option value="Technician">Technician</option>
+    <option value="Employee">Technician</option>
     <option value="Manager">Manager</option>
   </select>
 </div>

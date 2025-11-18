@@ -7,6 +7,7 @@ import { useParams } from "react-router-dom";
 import instance from "../../../Api/axios";
 import VehiclesOfCustomer from "../../tables/vehiclesOfCustomer";
 import OrdersOfCustomer from "../../tables/orderOfCustomer";
+import AddVehicle from "../../modal/addVehicle";
 
 export default function CustomerProfile() {
 
@@ -15,6 +16,13 @@ export default function CustomerProfile() {
    const [isLoading,setIsLoading]=useState<boolean>(true)
    const {authToken}=useAuth()
    const {id}=useParams()
+
+
+   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // 2. Define handler functions
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
 
    async function fetchCustomer() {
     if (!authToken) {
@@ -106,19 +114,32 @@ export default function CustomerProfile() {
               </div>
             )
           }
-         
-          <button className="mt-4 bg-red-600 text-white px-5 py-2 rounded-md hover:bg-red-700 transition">
+         <div>
+          <button className="mt-4 bg-red-600 text-white px-5 py-2 rounded-md hover:bg-red-700 transition" onClick={openModal}>
             ADD NEW VEHICLE
           </button>
+
+          {isModalOpen && (
+        <AddVehicle 
+          onClose={closeModal} customerId={customer.id}
+        />
+      )}
+        </div>
         </div>
 
         {/* Orders Section */}
-        <div>
-          <h3 className="text-lg font-semibold text-blue-900">
-            Orders of {customer?.fullName}
-          </h3>
-          <p className="text-gray-500 mt-2"><OrdersOfCustomer customerId={customer!.id}/></p>
-        </div>
+        {customer && (
+  <div>
+    <h3 className="text-lg font-semibold text-blue-900">
+      Orders of {customer.fullName}
+    </h3>
+
+    <p className="text-gray-500 mt-2">
+      <OrdersOfCustomer customerId={customer.id} />
+    </p>
+  </div>
+)}
+
       </div>
     </div>
   );

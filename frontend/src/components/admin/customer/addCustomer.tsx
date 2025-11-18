@@ -42,7 +42,7 @@ export default function AddCustomer() {
         }
       );
 
-      console.log("Response:", response.data);
+     
       setSuccess("Customer added successfully!");
       setFormData({
         email: "",
