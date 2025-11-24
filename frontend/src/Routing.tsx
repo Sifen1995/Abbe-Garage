@@ -15,6 +15,7 @@ import AllEmployees from "./components/admin/employee/allEmployee";
 import Service from "./components/admin/servicee/service";
 import UpdateEmployee from "./components/admin/employee/updateEmployee";
 import CustomerProfile from "./components/admin/customer/customerProfile";
+import AddOrder from "./components/admin/orders/addOrders";
 
 export default function Routing() {
   
@@ -43,6 +44,8 @@ export default function Routing() {
              <Route path="updateemployee" element={<UpdateEmployee/>} />
           </Route>
           <Route path="services" element={<Service/>} />
+          <Route path="orders" element={<AddOrder/>} />
+ 
         </Route>
         
 
