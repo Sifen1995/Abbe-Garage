@@ -19,7 +19,7 @@ const Vehicle = sequelize.define(
       },
     },
     vehicle_year: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
       allowNull: true,
     },
     vehicle_make: {
