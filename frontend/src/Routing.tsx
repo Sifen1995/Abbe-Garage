@@ -15,7 +15,11 @@ import AllEmployees from "./components/admin/employee/allEmployee";
 import Service from "./components/admin/servicee/service";
 import UpdateEmployee from "./components/admin/employee/updateEmployee";
 import CustomerProfile from "./components/admin/customer/customerProfile";
-import AddOrder from "./components/admin/orders/addOrders";
+import OrdersMain from "./components/admin/orders/main";
+import GetAllOrders from "./components/admin/orders/getAllOrders";
+import ViewOrder from "./components/admin/orders/viewOrder";
+import EditOrder from "./components/admin/orders/editOrder";
+import PublicPage from "./pages/public/publicPage";
 
 export default function Routing() {
   
@@ -29,6 +33,7 @@ export default function Routing() {
         <Route path="/contact" element={<Contact/>}/>
         <Route path="/about" element={<About/>}/>
         <Route path="/" element={<HomePage/>}/>
+        <Route path="/public" element={<PublicPage/>}/>
         {/* protected routes */}
         
    <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>}>
@@ -44,7 +49,10 @@ export default function Routing() {
              <Route path="updateemployee" element={<UpdateEmployee/>} />
           </Route>
           <Route path="services" element={<Service/>} />
-          <Route path="orders" element={<AddOrder/>} />
+          <Route path="orders" element={<GetAllOrders />} />
+          <Route path="orders/view/:id" element={<ViewOrder />} />
+          <Route path="orders/edit/:id" element={<EditOrder />} />
+          <Route path="neworder" element={<OrdersMain />} />
  
         </Route>
         

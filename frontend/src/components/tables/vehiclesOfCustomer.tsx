@@ -5,9 +5,10 @@ import instance from "../../Api/axios";
 
 interface VehiclesProps {
   customerId: string | number;
+  onSelectVehicle?: (vehicle: Vehicle) => void;
 }
 
-export default function VehiclesOfCustomer({ customerId }: VehiclesProps) {
+export default function VehiclesOfCustomer({ customerId, onSelectVehicle }: VehiclesProps) {
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -83,6 +84,7 @@ export default function VehiclesOfCustomer({ customerId }: VehiclesProps) {
             <th className="py-3 px-4 font-semibold">Tag</th>
             <th className="py-3 px-4 font-semibold">Serial Number</th>
             <th className="py-3 px-4 font-semibold">Color</th>
+            {onSelectVehicle && <th className="py-3 px-4 font-semibold text-center">Action</th>}
           </tr>
         </thead>
         <tbody>
@@ -100,6 +102,30 @@ export default function VehiclesOfCustomer({ customerId }: VehiclesProps) {
               <td className="py-3 px-4">{v.vehicleTag}</td>
               <td className="py-3 px-4">{v.vehicleSerialNumber}</td>
               <td className="py-3 px-4">{v.vehicleColor}</td>
+              {onSelectVehicle && (
+                <td className="py-3 px-4 text-center">
+                  <button
+                    onClick={() => onSelectVehicle(v)}
+                    className="text-gray-600 hover:text-black"
+                    aria-label="Select vehicle"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="w-6 h-6"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 4v16m8-8H4"
+                      />
+                    </svg>
+                  </button>
+                </td>
+              )}
             </tr>
           ))}
         </tbody>

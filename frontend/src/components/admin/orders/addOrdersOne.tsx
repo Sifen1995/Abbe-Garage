@@ -3,7 +3,11 @@ import instance from "../../../Api/axios";
 import { useAuth } from "../../context/AuthContext";
 import { type Customer } from "../../../types/customer";
 
-const AddOrder = () => {
+type AddOrderOneProps = {
+  onCustomerSelect: (customer: Customer) => void;
+};
+
+const AddOrderOne = ({ onCustomerSelect }: AddOrderOneProps) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [filtered, setFiltered] = useState<Customer[]>([]);
@@ -165,7 +169,7 @@ const AddOrder = () => {
                     <td className="px-4 py-3 text-center">
                       
                       <button
-                        onClick={() => console.log("Selected:", cust)}
+                        onClick={() => onCustomerSelect(cust)}
                         className="text-gray-600 hover:text-black"
                       >
                         {/* icon same size as image */}
@@ -198,4 +202,4 @@ const AddOrder = () => {
   );
 };
 
-export default AddOrder;
+export default AddOrderOne;
