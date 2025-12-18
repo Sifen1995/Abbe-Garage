@@ -41,17 +41,18 @@ export default function Routing() {
           <Route path="addcustomer" element={<AddCustomer />} /> 
           <Route path="addemployee" element={<AddEmployee />} />           
           <Route path="customers" element={<AllCustomers />}>
-          <Route path="updatecustomer" element={<UpdateCustomer/>} />
+          <Route path="updatecustomer/:id" element={<UpdateCustomer/>} />
            <Route path="profile/:id" element={<CustomerProfile/>} />
            </Route>
           <Route path="" element={<Admin/>} /> 
           <Route path="employees" element={<AllEmployees/>}> 
-             <Route path="updateemployee" element={<UpdateEmployee/>} />
+             <Route path="updateemployee/:id" element={<UpdateEmployee/>} />
           </Route>
           <Route path="services" element={<Service/>} />
-          <Route path="orders" element={<GetAllOrders />} />
-          <Route path="orders/view/:id" element={<ViewOrder />} />
-          <Route path="orders/edit/:id" element={<EditOrder />} />
+          <Route path="orders" element={<GetAllOrders />}>
+            <Route path="view/:id" element={<ViewOrder />} />
+           <Route path="edit/:id" element={<EditOrder />} />
+           </Route>
           <Route path="neworder" element={<OrdersMain />} />
  
         </Route>

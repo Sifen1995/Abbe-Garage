@@ -21,21 +21,38 @@ export interface OrderInfoDetail {
 }
 
 // Define the structure for a single Order item (from backend API)
-export interface Order {
-    id: number;
-    owiningCustomer: number; // Note: typo in backend "owining" instead of "owning"
-    assignedEmployee: number;
-    vehicle: number;
-    date: string; // ISO 8601 date string
-    hash: string;
-    status: string; // "Pending", "Completed", "In progress", etc.
-    totalPrice: string;
-    estimatedCompletionDate: string; // ISO 8601 date string
-    completionDate: string | null;
-    additonalRequests: string | null; // Note: typo in backend "additonal" instead of "additional"
-    additonalRequestsCompletionDate: boolean;
+// Common fields shared by both
+interface BaseOrder {
+  id: number;
+  date: string;
+  status: string;
+  totalPrice: string;
+  estimatedCompletionDate: string;
 }
 
+// For the "Get All" list (uses IDs for relations)
+export interface OrderListItem extends BaseOrder {
+  owiningCustomer: number; 
+  assignedEmployee: number;
+  vehicle: number;
+  hash: string;
+  completionDate: string | null;
+  additonalRequests: string;
+  additonalRequestsCompletionDate: boolean;
+}
+
+// For the "Get One" detail (uses populated objects/names)
+export interface OrderDetail extends BaseOrder {
+  owningCustomer: string; // Name instead of ID
+  assignedMechanick: string;
+  orderHash: string;
+  vehicleId: number;
+  orderAdditionalRequests: string;
+  services: {
+    serviceName: string;
+    serviceCompleted: boolean;
+  }[];
+}
 // Legacy Order structure (for backward compatibility if needed)
 export interface LegacyOrder {
     order_id: number;
@@ -48,9 +65,7 @@ export interface LegacyOrder {
 }
 
 // Define the top-level structure (the array of orders)
-export interface OrdersData {
-    orders: Order[];
-}
+
 
 // Define the structure for creating a new order
 export interface CreateOrderRequest {

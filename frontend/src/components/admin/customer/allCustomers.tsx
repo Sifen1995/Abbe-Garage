@@ -5,12 +5,14 @@ import { Outlet, useLocation } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
 import CustomerTable from '../../tables/customerTable';
 import CustomerProfile from './customerProfile';
+import UpdateCustomer from './updateCustomer';
 
 export default function AllCustomers() {
   const location = useLocation();
 
   const isMainCustomersPage = location.pathname === '/admin/customers';
   const isCustomerProfilePage = location.pathname.includes('/admin/customers/profile');
+  const isCustomerUpdatePage = location.pathname.includes('/admin/customers/update');
 
   return (
     <>
@@ -39,7 +41,10 @@ export default function AllCustomers() {
       ) :isCustomerProfilePage ? (
         // Otherwise, show nested route (like UpdateCustomer)
         <div className="p-8 w-full"><CustomerProfile/></div>
-      ):(
+      ): isCustomerUpdatePage ? (
+        <div className="p-8 w-full"><UpdateCustomer /></div>
+      ) :(      
+      
         <div className="p-8 w-full">
           <Outlet />
         </div>

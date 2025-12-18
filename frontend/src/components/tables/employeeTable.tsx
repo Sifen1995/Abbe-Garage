@@ -116,7 +116,7 @@ useEffect(()=>{
                 {/* Action Icons */}
                 <td className="py-3 px-4 text-sm whitespace-nowrap">
                   <div className="flex items-center">
-                    <Link to={'updateemployee'}><Edit /></Link>
+                    <Link to={`updateemployee/${employee.id}`}><Edit /></Link>
                     <ViewAction />
                   </div>
                 </td>

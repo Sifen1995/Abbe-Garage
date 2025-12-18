@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import instance from "../../Api/axios";
-import type { Order } from "../../types/orders";
+import type { LegacyOrder } from "../../types/orders";
 
 interface OrdersProps {
   customerId: number | string;
 }
 
 export default function OrdersOfCustomer({ customerId }: OrdersProps) {
-  const [orders, setOrders] = useState<Order[]>([]);
+  const [orders, setOrders] = useState<LegacyOrder[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const { authToken } = useAuth();
@@ -27,6 +27,7 @@ export default function OrdersOfCustomer({ customerId }: OrdersProps) {
         },
       });
       setOrders(response.data.orders || []);
+      
     } catch (error) {
       console.error("Fetch orders error:", error);
       setError("Failed to retrieve customer's order data");
@@ -34,6 +35,7 @@ export default function OrdersOfCustomer({ customerId }: OrdersProps) {
     } finally {
       setIsLoading(false);
     }
+    
   }
 
   useEffect(() => {
